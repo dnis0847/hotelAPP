@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная - HotelBooker{% endblock %}
+
+{% block content %}
+<section class="hero-section text-center text-white">
+    <div class="hero-content">
+        <h1 class="display-4 mb-4">Найдите идеальный отель для вашего путешествия</h1>
+        <p class="lead mb-4">Более 1000 отелей по всему миру ждут вас</p>
+    </div>
+</section>
+
+<section class="featured-hotels py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Популярные отели</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for hotel in featured_hotels %}
+            <div class="col">
+                <div class="card h-100">
+                    <img src="{{ hotel.image.url }}" class="card-img-top hotel-image" alt="{{ hotel.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ hotel.name }}</h5>
+                        <p class="card-text">{{ hotel.description|truncatewords:20 }}</p>
+                        <p class="card-text"><small class="text-muted">{{ hotel.location }}</small></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="star-rating">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= hotel.rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <p class="mb-0"><strong>{{ hotel.price_per_night }} ₽</strong> / ночь</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href={{ hotel.get_absolute_url }} class="btn btn-primary w-100">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="why-choose-us py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Почему выбирают нас</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100 border-0 bg-transparent">
+                    <div class="card-body text-center">
+                        <i class="fas fa-hotel fa-3x mb-3 text-primary"></i>
+                        <h5 class="card-title">Широкий выбор отелей</h5>
+                        <p class="card-text">Более 1000 отелей по всему миру на любой вкус и бюджет.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 border-0 bg-transparent">
+                    <div class="card-body text-center">
+                        <i class="fas fa-piggy-bank fa-3x mb-3 text-primary"></i>
+                        <h5 class="card-title">Лучшие цены</h5>
+                        <p class="card-text">Мы гарантируем самые выгодные цены на бронирование.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 border-0 bg-transparent">
+                    <div class="card-body text-center">
+                        <i class="fas fa-headset fa-3x mb-3 text-primary"></i>
+                        <h5 class="card-title">Поддержка 24/7</h5>
+                        <p class="card-text">Наша команда поддержки всегда готова помочь вам.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

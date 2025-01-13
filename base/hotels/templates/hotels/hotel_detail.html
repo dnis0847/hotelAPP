@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ hotel.name }}
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <h2>{{ hotel.name }}</h2>
+        {% if hotel.image %}
+          <img src="{{ hotel.image.url }}" class="img-fluid rounded mb-3" alt="{{ hotel.name }}" />
+        {% endif %}
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Об отеле</h5>
+            <p class="card-text">{{ hotel.description }}</p>
+            <p class="card-text">
+              <strong>Местоположение:</strong> {{ hotel.location }}
+            </p>
+            <p class="card-text">
+              <strong>Рейтинг:</strong>
+              {% for i in '12345'|make_list %}
+                {% if forloop.counter <= hotel.rating %}
+                  ★
+                {% else %}
+                  ☆
+                {% endif %}
+              {% endfor %}({{ hotel.rating }})
+            </p>
+            <p class="card-text">
+              <strong>Базовая цена за ночь:</strong> {{ hotel.price_per_night }} руб.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <h3 class="mb-4">Доступные номера</h3>
+    <div class="row">
+      {% for room in rooms %}
+        <div class="col-md-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Номер {{ room.room_number }}</h5>
+              <p class="card-text">Тип: {{ room.get_room_type_display }}</p>
+              <p class="card-text">Вместимость: {{ room.capacity }} чел.</p>
+              <p class="card-text">Цена за ночь: {{ room.price_per_night }} руб.</p>
+
+              {% if user.is_authenticated %}
+                <form method="post" action="{% url 'book_room' room.id %}">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label for="check_in" class="form-label">Дата заезда</label>
+                    <input type="date" class="form-control" id="check_in" name="check_in" required />
+                  </div>
+                  <div class="mb-3">
+                    <label for="check_out" class="form-label">Дата выезда</label>
+                    <input type="date" class="form-control" id="check_out" name="check_out" required />
+                  </div>
+                  <button type="submit" class="btn btn-primary">Забронировать</button>
+                </form>
+              {% else %}
+                <div class="alert alert-info">
+                  Для бронирования необходимо <a href="{% url 'login' %}">войти</a> в систему
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Отзывы об отеле -->
+    <div class="row mt-5">
+      <div class="col-md-8">
+        <h3>Отзывы об отеле</h3>
+
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'add_review' hotel.id %}" class="mb-4">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Оценка</label>
+              <select name="rating" class="form-select" required>
+                <option value="">Выберите оценку</option>
+                <option value="5">5 - Отлично</option>
+                <option value="4">4 - Хорошо</option>
+                <option value="3">3 - Нормально</option>
+                <option value="2">2 - Плохо</option>
+                <option value="1">1 - Ужасно</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Комментарий</label>
+              <textarea name="comment" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Оставить отзыв</button>
+          </form>
+        {% endif %}
+
+        <!-- Список отзывов -->
+        {% for review in hotel.review_set.all %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title">{{ review.user.username }}</h5>
+                <div class="text-warning">
+                  {% for i in '12345'|make_list %}
+                    {% if forloop.counter <= review.rating %}
+                      ★
+                    {% else %}
+                      ☆
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              <p class="card-text">{{ review.comment }}</p>
+              <small class="text-muted">{{ review.created_at|date:'d.m.Y H:i' }}</small>
+            </div>
+          </div>
+        {% empty %}
+          <p>Пока нет отзывов об этом отеле</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

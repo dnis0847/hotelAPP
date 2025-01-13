@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Мои бронирования</h2>
+
+    {% if bookings %}
+      <div class="row">
+        {% for booking in bookings %}
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ booking.room.hotel.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Номер: {{ booking.room.room_number }}</h6>
+                <p class="card-text">
+                  <strong>Даты:</strong><br />
+                  Заезд: {{ booking.check_in }}<br />
+                  Выезд: {{ booking.check_out }}
+                </p>
+                <p class="card-text">
+                  <strong>Общая стоимость:</strong> {{ booking.total_price }} руб.
+                </p>
+                <p class="card-text">
+                  <strong>Статус:</strong>
+                  {% if booking.check_out < today %}
+                    <span class="text-secondary">Завершено</span>
+                  {% else %}
+                    <span class="text-success">Активно</span>
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>У вас пока нет бронирований.</p>
+      <a href="{% url 'hotel_search' %}" class="btn btn-primary">Найти отель</a>
+    {% endif %}
+  </div>
+{% endblock %}

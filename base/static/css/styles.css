@@ -1,0 +1,108 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.card {
+    transition: transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.hotel-image {
+    height: 200px;
+    object-fit: cover;
+}
+
+.star-rating {
+    color: #ffc107;
+}
+
+footer {
+    margin-top: 50px;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/images/hero-background.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-search-form {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.featured-hotels .card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.featured-hotels .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.why-choose-us .card {
+    transition: transform 0.3s;
+}
+
+.why-choose-us .card:hover {
+    transform: translateY(-5px);
+}
+
+.why-choose-us .card-body i {
+    transition: color 0.3s;
+}
+
+.why-choose-us .card:hover .card-body i {
+    color: #0056b3;
+}
+
+/* Добавляем медиа-запрос для улучшения отзывчивости на мобильных устройствах */
+@media (max-width: 768px) {
+    .hero-section {
+        height: auto;
+        padding: 60px 0;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-search-form {
+        padding: 15px;
+    }
+}
+
